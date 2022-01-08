@@ -1,14 +1,24 @@
 import { Button } from "./Button";
 
 import '../styles/sidebar.scss';
-import { useMovies } from "../hooks/useMovies";
+import { memo } from "react";
 
-export function SideBar() {
+interface SideBarComponentProps {
+  genres: Array<{
+    id: number;
+    name: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
+    title: string;
+  }>;
+  selectedGenreId: number;
+  buttonClickCallback: (args: any) => void;
+}
 
-  const { genres, handleClickButton, selectedGenreId } = useMovies()
-  
+function SideBarComponent({
+  genres, 
+  selectedGenreId, 
+  buttonClickCallback
+}: SideBarComponentProps) { 
   return (
-    
       <nav className="sidebar">
         <span>Watch<p>Me</p></span>
 
@@ -18,7 +28,7 @@ export function SideBar() {
               key={String(genre.id)}
               title={genre.title}
               iconName={genre.name}
-              onClick={() => handleClickButton(genre.id)}
+              onClick={() => buttonClickCallback(genre.id)}
               selected={selectedGenreId === genre.id}
             />
           ))}
@@ -26,3 +36,5 @@ export function SideBar() {
       </nav>
   )
 }
+
+export const SideBar = memo(SideBarComponent)
